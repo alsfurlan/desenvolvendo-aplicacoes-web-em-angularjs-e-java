@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html ng-app="produtosApp">
+    <head>
+        <title>Desenvolvendo Aplicações Web com AngularJS e Java</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body ng-controller="ProdutosController">
+        <!--Cadastro-->
+        <form>
+            <h1>Cadastro</h1>
+            <label for="codigo">Código</label>
+            <input id="codigo" name="codigo" type="text" ng-model="produto.id"/>
+            <br>
+            <label for="descricao">Descrição</label>
+            <input id="descricao" name="descricao" type="text" ng-model="produto.descricao"/>
+            <br>
+            <label for="preco">Preço</label>
+            <input id="preco" name="preco" type="text" ng-model="produto.preco"/>
+            <br>
+            <button ng-click="salvar(produto)">Salvar</button>
+            <button ng-click="cancelar()">Cancelar</button>
+        </form>
+        <!--Tabela de preços-->
+        <h1>Tabela de Preços</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="produto in produtos track by $index">
+                    <td>{{produto.id}}</td>
+                    <td>{{produto.descricao}}</td>
+                    <td>{{produto.preco}}</td>
+                    <td><a href="" ng-click="editar(produto)">[Editar]</a></td>
+                    <td><a href="" ng-click="excluir(produto)">[Excluir]</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <script src="js/angular.min.js"></script>
+        <script>
+            var app = angular.module('produtosApp', []);
+
+            app.controller('ProdutosController', function ($scope) {
+
+                var produtos = [{
+                    id: 1,
+                    descricao: 'Arroz',
+                    preco: 2.50
+                }, {
+                    id: 2,
+                    descricao: 'Feijão',
+                    preco: 3.50
+                }];
+
+                $scope.produto = {};
+                $scope.produtos = produtos;
+                
+                $scope.salvar = function(produto) {
+                    var produtoEncontrado = false;
+                    for(var i=0, length = produtos.length; i < length; i++) {
+                        if(produtos[i].id == produto.id) {
+                            produtos[i].descricao = produto.descricao;
+                            produtos[i].preco = produto.preco;
+                            produtoEncontrado = true;
+                            break;
+                        }
+                    }
+                    if(!produtoEncontrado) {
+                        produtos.push(produto);
+                    }
+                    $scope.produto = {};
+                };
+                
+                $scope.editar = function(produto) {
+                    $scope.produto = angular.copy(produto);
+                };
+                
+                $scope.excluir = function(produto) {
+                    for(var i=0, length = produtos.length; i < length; i++) {
+                        if(produtos[i].id == produto.id) {
+                            produtos.splice(i, 1);
+                        }
+                    }
+                };
+                
+                $scope.cancelar = function() {
+                    $scope.produto = {};
+                };
+            });
+        </script>
+
+    </body>
+</html>
