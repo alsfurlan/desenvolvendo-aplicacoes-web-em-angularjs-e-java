@@ -1,0 +1,9 @@
+{
+  "produtos": [
+    {
+      "id": 3,
+      "descricao": "Rúcula",
+      "preco": 2.5
+    }
+  ]
+}
