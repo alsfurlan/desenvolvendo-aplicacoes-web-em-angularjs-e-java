@@ -3,6 +3,9 @@ package produtos;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,59 +22,46 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class ProdutoService {
 
-    private static Integer contador = 1;
-    private List<Produto> produtos;
+    @PersistenceContext(unitName = "ProdutosPU")
+    private EntityManager entityManager;
 
     public ProdutoService() {
-        produtos = new ArrayList<>();
     }
 
     @GET
     public List<Produto> getProdutos() {
-        return produtos;
+        Query query = entityManager.createQuery("SELECT p FROM Produto p");
+        return query.getResultList();
     }
 
     @POST
     public Produto adicionar(Produto produto) {
-        produto.setId(contador++);
-        produtos.add(produto);
+        entityManager.persist(produto);
         return produto;
     }
 
     @PUT
     @Path("{id}")
-    public Produto atualizar(@PathParam("id") Integer id, Produto produto) {
-        for (Produto p : produtos) {
-            if (p.getId().equals(id)) {
-                p.setDescricao(produto.getDescricao());
-                p.setPreco(produto.getPreco());
-                return p;
-            }
-        }
-        return null;
+    public Produto atualizar(@PathParam("id") Integer id, Produto produtoAtualizado) {
+        Produto produtoEncontrado = getProduto(id);
+        produtoEncontrado.setDescricao(produtoAtualizado.getDescricao());
+        produtoEncontrado.setPreco(produtoAtualizado.getPreco());
+        entityManager.merge(produtoEncontrado);
+        return produtoEncontrado;
     }
 
     @DELETE
     @Path("{id}")
     public Produto excluir(@PathParam("id") Integer id) {
-        for (Produto p : produtos) {
-            if (p.getId().equals(id)) {
-                produtos.remove(p);
-                return p;
-            }
-        }
-        return null;
+        Produto produto = getProduto(id);
+        entityManager.remove(produto);
+        return produto;
     }
     
     @GET
     @Path("{id}")
     public Produto getProduto(@PathParam("id") Integer id) {
-        for (Produto p : produtos) {
-            if (p.getId().equals(id)) {
-                return p;
-            }
-        }
-        return null;
+        return entityManager.find(Produto.class, id);
     }
 
 }
