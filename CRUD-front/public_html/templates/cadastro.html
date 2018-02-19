@@ -1,0 +1,16 @@
+<form>
+    <h1>Cadastro</h1>
+    <label for="codigo">Código</label>
+    <input id="codigo" name="codigo" type="text" ng-model="produto.id"/>
+    <br>
+    <label for="descricao">Descrição</label>
+    <input id="descricao" name="descricao" type="text" ng-model="produto.descricao"/>
+    <br>
+    <label for="preco">Preço</label>
+    <input id="preco" name="preco" type="text" ng-model="produto.preco"/>
+    <br>
+    <br>
+    <button ng-click="salvar(produto)">Salvar</button>
+    <button ng-click="salvarCadastrarNovo(produto)">Salvar e Cadastrar Novo</button>
+    <button ng-click="cancelar()">Cancelar</button>
+</form>

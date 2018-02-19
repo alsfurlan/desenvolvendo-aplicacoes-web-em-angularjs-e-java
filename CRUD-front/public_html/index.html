@@ -5,45 +5,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body ng-controller="ProdutosController">
-        <!--Cadastro-->
-        <form>
-            <h1>Cadastro</h1>
-            <label for="codigo">Código</label>
-            <input id="codigo" name="codigo" type="text" ng-model="produto.id"/>
-            <br>
-            <label for="descricao">Descrição</label>
-            <input id="descricao" name="descricao" type="text" ng-model="produto.descricao"/>
-            <br>
-            <label for="preco">Preço</label>
-            <input id="preco" name="preco" type="text" ng-model="produto.preco"/>
-            <br>
-            <button ng-click="salvar(produto)">Salvar</button>
-            <button ng-click="cancelar()">Cancelar</button>
-        </form>
-        <!--Tabela de preços-->
-        <h1>Tabela de Preços</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Descrição</th>
-                    <th>Preço</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="produto in produtos track by $index">
-                    <td ng-dblclick="editar(produto)">{{produto.id}}</td>
-                    <td ng-dblclick="editar(produto)">{{produto.descricao}}</td>
-                    <td ng-dblclick="editar(produto)">{{produto.preco}}</td>
-                    <td><a href="" ng-click="editar(produto)">[Editar]</a></td>
-                    <td><a href="" ng-click="excluir(produto)">[Excluir]</a></td>
-                </tr>
-            </tbody>
-        </table>
+    <body>
+        <h1>Produtos</h1>
+        [ <a href="#/tabela"> Tabela</a> | <a href="#/cadastro"> Cadastro</a> ]
+        <ng-view></ng-view>
         <script src="js/angular.min.js"></script>
+        <script src="js/angular-route.min.js"></script>
         <script src="js/app.js"></script>
     </body>
 </html>

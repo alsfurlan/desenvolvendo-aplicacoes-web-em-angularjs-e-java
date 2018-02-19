@@ -1,8 +1,19 @@
-var app = angular.module('produtosApp', []);
+var app = angular.module('produtosApp', ['ngRoute']);
 
-app.controller('ProdutosController', function ($scope, ProdutosService) {
+app.config(function ($routeProvider) {
+    $routeProvider.when('/cadastro', {
+        templateUrl: 'templates/cadastro.html',
+        controller: 'CadastroProdutosController'
+    }).when('/cadastro/:id', {
+        templateUrl: 'templates/cadastro.html',
+        controller: 'CadastroProdutosController'
+    }).when('/tabela', {
+        templateUrl: 'templates/tabela.html',
+        controller: 'TabelaProdutosController'
+    }).otherwise('/tabela');
+});
 
-    $scope.produto = {};
+app.controller('TabelaProdutosController', function ($scope, ProdutosService) {
 
     listar();
 
@@ -12,27 +23,49 @@ app.controller('ProdutosController', function ($scope, ProdutosService) {
         });
     }
 
-    $scope.salvar = function (produto) {
-        ProdutosService.salvar(produto).then(listar);
-        $scope.produto = {};
-    };
-
-    $scope.editar = function (produto) {
-        $scope.produto = angular.copy(produto);
-    };
-
     $scope.excluir = function (produto) {
         ProdutosService.excluir(produto).then(listar);
     };
 
-    $scope.cancelar = function () {
+});
+
+app.controller('CadastroProdutosController', function ($routeParams, $scope, $location, ProdutosService) {
+
+    var id = $routeParams.id;
+
+    if (id) {
+        ProdutosService.getProduto(id).then(function (resposta) {
+            $scope.produto = resposta.data;
+        });
+    } else {
         $scope.produto = {};
+    }
+
+    function salvar(produto) {
+        $scope.produto = {};
+        return ProdutosService.salvar(produto);
+    }
+
+    function redirecionarTabela() {
+        $location.path('/tabela');
+    }
+
+    $scope.salvar = function (produto) {
+        salvar(produto).then(redirecionarTabela);
     };
+
+    $scope.salvarCadastrarNovo = salvar;
+    $scope.cancelar = redirecionarTabela;
+
 });
 
 app.service('ProdutosService', function ($http) {
 
     var api = 'http://localhost:8080/api/webresources/produtos';
+
+    this.getProduto = function (id) {
+        return $http.get(api + '/' + id);
+    };
 
     this.listar = function () {
         return $http.get(api);
