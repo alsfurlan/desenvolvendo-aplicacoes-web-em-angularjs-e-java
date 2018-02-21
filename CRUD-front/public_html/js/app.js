@@ -1,4 +1,4 @@
-var app = angular.module('produtosApp', ['ngRoute']);
+var app = angular.module('produtosApp', ['ngRoute', 'ngResource']);
 
 app.config(function ($routeProvider) {
     $routeProvider.when('/cadastro', {
@@ -18,8 +18,8 @@ app.controller('TabelaProdutosController', function ($scope, ProdutosService) {
     listar();
 
     function listar() {
-        ProdutosService.listar().then(function (resposta) {
-            $scope.produtos = resposta.data;
+        ProdutosService.listar().then(function (produtos) {
+            $scope.produtos = produtos;
         });
     }
 
@@ -34,8 +34,8 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
     var id = $routeParams.id;
 
     if (id) {
-        ProdutosService.getProduto(id).then(function (resposta) {
-            $scope.produto = resposta.data;
+        ProdutosService.getProduto(id).then(function (produto) {
+            $scope.produto = produto;
         });
     } else {
         $scope.produto = {};
@@ -59,28 +59,47 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
 
 });
 
-app.service('ProdutosService', function ($http) {
-
-    var api = 'http://localhost:8080/api/webresources/produtos';
+app.service('ProdutosService', function (ProdutosResource) {
 
     this.getProduto = function (id) {
-        return $http.get(api + '/' + id);
+        return ProdutosResource.getProduto({id: id}).$promise;
     };
 
     this.listar = function () {
-        return $http.get(api);
+        return ProdutosResource.listar().$promise;
     };
 
     this.salvar = function (produto) {
         if (produto.id) {
-            return $http.put(api + '/' + produto.id, produto);
+            return ProdutosResource.atualizar({id: produto.id}, produto).$promise;
         } else {
-            return $http.post(api, produto);
+            return ProdutosResource.salvar(produto).$promise;
         }
     };
 
     this.excluir = function (produto) {
-        return $http.delete(api + '/' + produto.id);
+        return ProdutosResource.excluir({id: produto.id}).$promise;
     };
 
+});
+
+app.factory('ProdutosResource', function ($resource) {
+    return  $resource('http://localhost:8080/api/webresources/produtos/:id', {}, {
+        atualizar: {
+            method: 'PUT'
+        },
+        listar: {
+            method: 'GET',
+            isArray: true
+        },
+        getProduto: {
+            method: 'GET'
+        },
+        salvar: {
+            method: 'POST'
+        },
+        excluir: {
+            method: 'DELETE'
+        }
+    });
 });
