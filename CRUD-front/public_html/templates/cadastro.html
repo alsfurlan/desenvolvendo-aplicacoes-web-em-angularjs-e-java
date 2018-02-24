@@ -1,16 +1,19 @@
-<form>
+<form name="cadastroProdutosForm">
     <h1>Cadastro</h1>
     <label for="codigo">Código</label>
     <input id="codigo" name="codigo" type="text" ng-model="produto.id"/>
     <br>
     <label for="descricao">Descrição</label>
-    <input id="descricao" name="descricao" type="text" ng-model="produto.descricao"/>
+    <input id="descricao" name="descricao" type="text" ng-model="produto.descricao" required minlength="3" />
+    <span class="aviso" ng-show="cadastroProdutosForm.descricao.$dirty && cadastroProdutosForm.descricao.$error.required">O campo descrição é obrigatório</span>
+    <span class="aviso" ng-show="cadastroProdutosForm.descricao.$dirty && cadastroProdutosForm.descricao.$error.minlength">O campo descrição precisa ter no mínimo três caracteres</span>
     <br>
     <label for="preco">Preço</label>
-    <input id="preco" name="preco" type="text" ng-model="produto.preco"/>
+    <input id="preco" name="preco" type="text" ng-model="produto.preco" required />
+    <span class="aviso" ng-show="cadastroProdutosForm.preco.$dirty && cadastroProdutosForm.preco.$error.required">O campo preço é obrigatório</span>
     <br>
     <br>
-    <button ng-click="salvar(produto)">Salvar</button>
-    <button ng-click="salvarCadastrarNovo(produto)">Salvar e Cadastrar Novo</button>
+    <button ng-click="salvar(produto)" ng-disabled="cadastroProdutosForm.$invalid">Salvar</button>
+    <button ng-click="salvarCadastrarNovo(produto)" ng-disabled="cadastroProdutosForm.$invalid">Salvar e Cadastrar Novo</button>
     <button ng-click="cancelar()">Cancelar</button>
 </form>

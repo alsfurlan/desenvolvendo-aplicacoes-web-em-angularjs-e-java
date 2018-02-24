@@ -39,7 +39,7 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
         });
     } else {
         $scope.produto = {};
-    }
+    } 
 
     function salvar(produto) {
         $scope.produto = {};
@@ -54,7 +54,10 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
         salvar(produto).then(redirecionarTabela);
     };
 
-    $scope.salvarCadastrarNovo = salvar;
+    $scope.salvarCadastrarNovo = function(produto) {
+        salvar(produto);
+        $scope.cadastroProdutosForm.$setPristine();
+    };
     $scope.cancelar = redirecionarTabela;
 
 });
