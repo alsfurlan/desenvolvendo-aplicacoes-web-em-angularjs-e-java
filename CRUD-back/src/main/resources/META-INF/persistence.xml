@@ -3,6 +3,8 @@
   <persistence-unit name="ProdutosPU" transaction-type="JTA">
     <jta-data-source>java:/jboss/CrudDS</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <properties>
+        <property name="hibernate.hbm2ddl.auto" value="update" />
+    </properties> 
   </persistence-unit>
 </persistence>
