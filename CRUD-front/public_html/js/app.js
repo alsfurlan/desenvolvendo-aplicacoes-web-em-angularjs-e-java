@@ -49,14 +49,19 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
     function redirecionarTabela() {
         $location.path('/tabela');
     }
+    
+    function erros(erros) {
+        $scope.erros = erros.data;
+    }
 
     $scope.salvar = function (produto) {
-        salvar(produto).then(redirecionarTabela);
+        salvar(produto).then(redirecionarTabela, erros);
     };
 
     $scope.salvarCadastrarNovo = function(produto) {
-        salvar(produto);
-        $scope.cadastroProdutosForm.$setPristine();
+        salvar(produto).then(function() {
+            $scope.cadastroProdutosForm.$setPristine();
+        }, erros);
     };
     $scope.cancelar = redirecionarTabela;
 

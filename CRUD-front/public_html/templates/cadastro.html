@@ -4,14 +4,17 @@
     <input id="codigo" name="codigo" type="text" ng-model="produto.id"/>
     <br>
     <label for="descricao">Descrição</label>
-    <input id="descricao" name="descricao" type="text" ng-model="produto.descricao" required minlength="3" />
+    <input id="descricao" name="descricao" type="text" ng-model="produto.descricao" />
     <span class="aviso" ng-show="cadastroProdutosForm.descricao.$dirty && cadastroProdutosForm.descricao.$error.required">O campo descrição é obrigatório</span>
     <span class="aviso" ng-show="cadastroProdutosForm.descricao.$dirty && cadastroProdutosForm.descricao.$error.minlength">O campo descrição precisa ter no mínimo três caracteres</span>
     <br>
     <label for="preco">Preço</label>
-    <input id="preco" name="preco" type="text" ng-model="produto.preco" required />
+    <input id="preco" name="preco" type="text" ng-model="produto.preco" />
     <span class="aviso" ng-show="cadastroProdutosForm.preco.$dirty && cadastroProdutosForm.preco.$error.required">O campo preço é obrigatório</span>
     <br>
+    <p class="aviso" ng-repeat="erro in erros track by $index"> 
+        {{erro}}
+    </p>
     <br>
     <button ng-click="salvar(produto)" ng-disabled="cadastroProdutosForm.$invalid">Salvar</button>
     <button ng-click="salvarCadastrarNovo(produto)" ng-disabled="cadastroProdutosForm.$invalid">Salvar e Cadastrar Novo</button>

@@ -14,6 +14,7 @@ public class ApplicationConfig extends Application {
     }
 
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(config.ConstraintViolationExceptionMapper.class);
         resources.add(config.CrossOriginFilter.class);
         resources.add(produtos.ProdutoService.class);
     }
