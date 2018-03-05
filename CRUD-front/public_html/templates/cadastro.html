@@ -13,6 +13,26 @@
         {{erro}}
     </p>
     <br>
+    <hr>
+    <h2>Movimentações</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Data/Hora</th>
+            <th>Tipo</th>
+            <th>Quantidade</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="movimentacao in produto.movimentacoes">
+                <td>{{movimentacao.dataHora | date: 'dd/MM/yyyy HH:mm'}}</td>
+                <td>{{movimentacao.tipo}}</td>
+                <td>{{movimentacao.quantidade}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <hr>
     <button ng-click="salvar(produto)" ng-disabled="cadastroProdutosForm.$invalid">Salvar</button>
     <button ng-click="salvarCadastrarNovo(produto)" ng-disabled="cadastroProdutosForm.$invalid">Salvar e Cadastrar Novo</button>
     <button ng-click="cancelar()">Cancelar</button>
