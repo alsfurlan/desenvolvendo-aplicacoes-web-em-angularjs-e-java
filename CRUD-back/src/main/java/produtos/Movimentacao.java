@@ -29,7 +29,7 @@ public class Movimentacao implements Serializable {
     
     @Enumerated(EnumType.STRING)
     @NotNull(message = "O tipo de movimentação é obrigatório")
-    private TipoMovimentacao tipoMovimentacao;
+    private TipoMovimentacao tipo;
     
     @NotNull(message = "A quantidade da movimentação é obrigatóra")
     private Double quantidade;
@@ -56,12 +56,12 @@ public class Movimentacao implements Serializable {
         this.dataHora = dataHora;
     }
 
-    public TipoMovimentacao getTipoMovimentacao() {
-        return tipoMovimentacao;
+    public TipoMovimentacao getTipo() {
+        return tipo;
     }
 
-    public void setTipoMovimentacao(TipoMovimentacao tipoMovimentacao) {
-        this.tipoMovimentacao = tipoMovimentacao;
+    public void setTipo(TipoMovimentacao tipo) {
+        this.tipo = tipo;
     }
 
     public Double getQuantidade() {
