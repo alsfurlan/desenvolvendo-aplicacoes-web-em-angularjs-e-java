@@ -39,7 +39,7 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
         });
     } else {
         $scope.produto = {};
-    } 
+    }
 
     function salvar(produto) {
         $scope.produto = {};
@@ -49,7 +49,7 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
     function redirecionarTabela() {
         $location.path('/tabela');
     }
-    
+
     function erros(erros) {
         $scope.erros = erros.data;
     }
@@ -58,12 +58,25 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
         salvar(produto).then(redirecionarTabela, erros);
     };
 
-    $scope.salvarCadastrarNovo = function(produto) {
-        salvar(produto).then(function() {
+    $scope.salvarCadastrarNovo = function (produto) {
+        salvar(produto).then(function () {
             $scope.cadastroProdutosForm.$setPristine();
         }, erros);
     };
     $scope.cancelar = redirecionarTabela;
+
+    function limparFormularioMovimentacao() {
+        $scope.movimentacao = {};
+    }
+    
+    $scope.adicionarMovimentacao = function (produto, movimentacao) {
+        ProdutosService.adicionarMovimentacao(produto, movimentacao).then(function (produto) {
+            $scope.produto = produto;
+            limparFormularioMovimentacao();
+        });
+    };
+    
+    $scope.cancelarMovimentacao = limparFormularioMovimentacao;
 
 });
 
@@ -89,10 +102,17 @@ app.service('ProdutosService', function (ProdutosResource) {
         return ProdutosResource.excluir({id: produto.id}).$promise;
     };
 
+    this.adicionarMovimentacao = function (produto, movimentacao) {
+        return ProdutosResource.adicionarMovimentacao({id: produto.id}, movimentacao).$promise;
+    };
+
 });
 
 app.factory('ProdutosResource', function ($resource) {
-    return  $resource('http://localhost:8080/api/webresources/produtos/:id', {}, {
+
+    var uri = 'http://localhost:8080/api/webresources/produtos/:id';
+
+    return $resource(uri, {}, {
         atualizar: {
             method: 'PUT'
         },
@@ -108,6 +128,13 @@ app.factory('ProdutosResource', function ($resource) {
         },
         excluir: {
             method: 'DELETE'
+        },
+        adicionarMovimentacao: {
+            method: 'POST',
+            url: uri + '/movimentacoes',
+            params: {
+                id: '@id'
+            }
         }
     });
 });

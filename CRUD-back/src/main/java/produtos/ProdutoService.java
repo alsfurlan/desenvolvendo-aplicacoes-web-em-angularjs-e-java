@@ -63,5 +63,14 @@ public class ProdutoService {
     public Produto getProduto(@PathParam("id") Integer id) {
         return entityManager.find(Produto.class, id);
     }
-
+    
+    @POST
+    @Path("{id}/movimentacoes")
+    public Produto adicionarMovimentacao(@PathParam("id") Integer id, Movimentacao m) {
+        Produto produto = getProduto(id);
+        m.setProduto(produto);
+        entityManager.persist(m);
+        produto.getMovimentacoes().add(m);
+        return produto;
+    }
 }
