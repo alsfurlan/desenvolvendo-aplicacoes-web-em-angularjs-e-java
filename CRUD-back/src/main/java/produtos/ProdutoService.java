@@ -88,4 +88,16 @@ public class ProdutoService {
     private Movimentacao getMovimentacao(Integer idMovimentacao) {
         return entityManager.find(Movimentacao.class, idMovimentacao);
     }
+    
+    @PUT
+    @Path("{id}/movimentacoes/{idMovimentacao}")
+    public Produto atualizarMovimentacao(@PathParam("id") Integer id,
+            @PathParam("idMovimentacao") Integer idMovimentacao,
+            Movimentacao movimentacaoAtualizada) {
+        
+        movimentacaoAtualizada.setProduto(getProduto(id));
+        entityManager.merge(movimentacaoAtualizada);
+        return getProduto(id);
+    }
+    
 }

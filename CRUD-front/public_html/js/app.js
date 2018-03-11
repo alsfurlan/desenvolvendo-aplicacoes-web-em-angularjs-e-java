@@ -69,8 +69,8 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
         $scope.movimentacao = {};
     }
 
-    $scope.adicionarMovimentacao = function (produto, movimentacao) {
-        ProdutosService.adicionarMovimentacao(produto, movimentacao).then(function (produto) {
+    $scope.salvarMovimentacao = function (produto, movimentacao) {
+        ProdutosService.salvarMovimentacao(produto, movimentacao).then(function (produto) {
             $scope.produto = produto;
             limparFormularioMovimentacao();
         });
@@ -82,6 +82,11 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
         ProdutosService.excluirMovimentacao(produto, movimentacao).then(function (produto) {
             $scope.produto = produto;
         });
+    };
+
+    $scope.editarMovimentacao = function (movimentacao) {
+        movimentacao.dataHora = new Date(movimentacao.dataHora);
+        $scope.movimentacao = angular.copy(movimentacao);
     };
 
 });
@@ -108,8 +113,13 @@ app.service('ProdutosService', function (ProdutosResource) {
         return ProdutosResource.excluir({id: produto.id}).$promise;
     };
 
-    this.adicionarMovimentacao = function (produto, movimentacao) {
-        return ProdutosResource.adicionarMovimentacao({id: produto.id}, movimentacao).$promise;
+    this.salvarMovimentacao = function (produto, movimentacao) {
+        if (movimentacao.id) {
+            console.log({id: produto.id, idMovimentacao: movimentacao.id});
+            return ProdutosResource.atualizarMovimentacao({id: produto.id, idMovimentacao: movimentacao.id}, movimentacao).$promise;
+        } else {
+            return ProdutosResource.adicionarMovimentacao({id: produto.id}, movimentacao).$promise;
+        }
     };
 
     this.excluirMovimentacao = function (produto, movimentacao) {
@@ -144,6 +154,14 @@ app.factory('ProdutosResource', function ($resource) {
             url: uri + '/movimentacoes',
             params: {
                 id: '@id'
+            }
+        },
+        atualizarMovimentacao: {
+            method: 'PUT',
+            url: uri + '/movimentacoes/:idMovimentacao',
+            params: {
+                id: '@id',
+                idMovimentacao: '@idMovimentacao'
             }
         },
         excluirMovimentacao: {

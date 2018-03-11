@@ -17,19 +17,22 @@
     <h2>Movimentações</h2>
     <table border="1">
         <thead>
-        <tr>
-            <th>Data/Hora</th>
-            <th>Tipo</th>
-            <th>Quantidade</th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>Data/Hora</th>
+                <th>Tipo</th>
+                <th>Quantidade</th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="movimentacao in produto.movimentacoes">
-                <td>{{movimentacao.dataHora | date: 'dd/MM/yyyy HH:mm'}}</td>
+            <tr data-ng-repeat="movimentacao in produto.movimentacoes | orderBy: 'dataHora' track by $index">
+                <td>{{movimentacao.dataHora| date: 'dd/MM/yyyy HH:mm'}}</td>
                 <td>{{movimentacao.tipo}}</td>
                 <td>{{movimentacao.quantidade}}</td>
-                <td><a href ng-click="excluirMovimentacao(produto, movimentacao)">[Excluir]</a></td>
+                <td>
+                    <a href ng-click="editarMovimentacao(movimentacao)">[Editar]</a>
+                    <a href ng-click="excluirMovimentacao(produto, movimentacao)">[Excluir]</a>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -47,7 +50,7 @@
         <label for="quantidadeMovimentacao">Quantidade:</label>
         <input type="text" id="quantidadeMovimentacao" ng-model="movimentacao.quantidade"/>
         <br>
-        <button ng-click="adicionarMovimentacao(produto, movimentacao)">Salvar</button>
+        <button ng-click="salvarMovimentacao(produto, movimentacao)">Salvar</button>
         <button ng-click="cancelarMovimentacao()">Cancelar</button>
     </div>
     <hr>
