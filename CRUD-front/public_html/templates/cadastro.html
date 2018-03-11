@@ -21,6 +21,7 @@
             <th>Data/Hora</th>
             <th>Tipo</th>
             <th>Quantidade</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +29,7 @@
                 <td>{{movimentacao.dataHora | date: 'dd/MM/yyyy HH:mm'}}</td>
                 <td>{{movimentacao.tipo}}</td>
                 <td>{{movimentacao.quantidade}}</td>
+                <td><a href ng-click="excluirMovimentacao(produto, movimentacao)">[Excluir]</a></td>
             </tr>
         </tbody>
     </table>

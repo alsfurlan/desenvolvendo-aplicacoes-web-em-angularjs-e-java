@@ -68,15 +68,21 @@ app.controller('CadastroProdutosController', function ($routeParams, $scope, $lo
     function limparFormularioMovimentacao() {
         $scope.movimentacao = {};
     }
-    
+
     $scope.adicionarMovimentacao = function (produto, movimentacao) {
         ProdutosService.adicionarMovimentacao(produto, movimentacao).then(function (produto) {
             $scope.produto = produto;
             limparFormularioMovimentacao();
         });
     };
-    
+
     $scope.cancelarMovimentacao = limparFormularioMovimentacao;
+
+    $scope.excluirMovimentacao = function (produto, movimentacao) {
+        ProdutosService.excluirMovimentacao(produto, movimentacao).then(function (produto) {
+            $scope.produto = produto;
+        });
+    };
 
 });
 
@@ -104,6 +110,10 @@ app.service('ProdutosService', function (ProdutosResource) {
 
     this.adicionarMovimentacao = function (produto, movimentacao) {
         return ProdutosResource.adicionarMovimentacao({id: produto.id}, movimentacao).$promise;
+    };
+
+    this.excluirMovimentacao = function (produto, movimentacao) {
+        return ProdutosResource.excluirMovimentacao({id: produto.id, idMovimentacao: movimentacao.id}, movimentacao).$promise;
     };
 
 });
@@ -134,6 +144,14 @@ app.factory('ProdutosResource', function ($resource) {
             url: uri + '/movimentacoes',
             params: {
                 id: '@id'
+            }
+        },
+        excluirMovimentacao: {
+            method: 'DELETE',
+            url: uri + '/movimentacoes/:idMovimentacao',
+            params: {
+                id: '@id',
+                idMovimentacao: '@idMovimentacao'
             }
         }
     });

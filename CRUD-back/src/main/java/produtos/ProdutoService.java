@@ -73,4 +73,19 @@ public class ProdutoService {
         produto.getMovimentacoes().add(m);
         return produto;
     }
+
+    @DELETE
+    @Path("{id}/movimentacoes/{idMovimentacao}")
+    public Produto excluirMovimentacao(@PathParam("id") Integer id,
+            @PathParam("idMovimentacao") Integer idMovimentacao) {
+        Produto produto = getProduto(id);
+        Movimentacao movimentacao = getMovimentacao(idMovimentacao);
+        entityManager.remove(movimentacao);
+        produto.getMovimentacoes().remove(movimentacao);
+        return produto;
+    }
+
+    private Movimentacao getMovimentacao(Integer idMovimentacao) {
+        return entityManager.find(Movimentacao.class, idMovimentacao);
+    }
 }
